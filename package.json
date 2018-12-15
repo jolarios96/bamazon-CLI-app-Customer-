@@ -1,0 +1,22 @@
+{
+  "name": "bamazon-cli-app-customer-",
+  "version": "1.0.0",
+  "description": "A MySQL database, coded for use by the customer.",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jolarios96/bamazon-CLI-app-Customer-.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jolarios96/bamazon-CLI-app-Customer-/issues"
+  },
+  "homepage": "https://github.com/jolarios96/bamazon-CLI-app-Customer-#readme",
+  "dependencies": {
+    "mysql": "^2.16.0"
+  }
+}
