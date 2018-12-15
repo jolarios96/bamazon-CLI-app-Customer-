@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/jolarios96/bamazon-CLI-app-Customer-#readme",
   "dependencies": {
+    "inquirer": "^6.2.1",
     "mysql": "^2.16.0"
   }
 }
