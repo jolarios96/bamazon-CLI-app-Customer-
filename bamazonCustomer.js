@@ -50,20 +50,27 @@ function promptForItem(items) {
     inquirer.prompt([
         {
             type: 'input',
-            message: 'Input the ID of the product to buy.',
+            message: "Input the ID of the product to buy. (or type 'exit')",
             name: 'choice',
         }
     ]).then(function (val) {
-        var choiceID = parseInt(val.choice);
-        var product = checkInventory(choiceID, items);
 
-        // If product exists
-        if (product) {
-            // Prompt for quantity
-            promptQuantity(product);
+        // if user typed exit
+        if (val.choice === 'exit') {
+            console.log("Closing Program.");
+            process.exit(0);
         } else {
-            console.log('\nThat item is out of stock!');
-            loadProducts();
+            var choiceID = parseInt(val.choice);
+            var product = checkInventory(choiceID, items);
+
+            // If product exists
+            if (product) {
+                // Prompt for quantity
+                promptQuantity(product);
+            } else {
+                console.log('\nThat item is out of stock!');
+                loadProducts();
+            };
         };
     });
 };
@@ -73,21 +80,28 @@ function promptQuantity(product) {
         {
             type: "input",
             name: "quantity",
-            message: "How many would you like?",
+            message: "How many would you like? (or type 'exit')",
             validate: function (val) {
                 return val > 0
             }
         }
     ]).then(function (val) {
-        var quantity = parseInt(val.quantity);
 
-        // If supply < user query
-        if (quantity > product.stock_quantity) {
-            console.log("\nInsufficient quantity!");
-            loadProducts();
+        // if user typed exit
+        if (val.choice === 'exit') {
+            console.log("Closing Program.");
+            process.exit(0);
         } else {
-            // Finish the purchase, update table
-            finalize(product, quantity)
+            var quantity = parseInt(val.quantity);
+
+            // If supply < user query
+            if (quantity > product.stock_quantity) {
+                console.log("\nInsufficient quantity!");
+                loadProducts();
+            } else {
+                // Finish the purchase, update table
+                finalize(product, quantity)
+            };
         };
     });
 };
