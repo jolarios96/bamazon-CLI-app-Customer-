@@ -35,6 +35,8 @@ connection.connect(function (err) {
 function loadProducts() {
     // Selects all from 'products' in table
     connection.query('SELECT * FROM products', function (err, res) {
+
+        // if error, forgot to put password/incorrect password (Probably)
         if (err) throw err;
 
         // renders table of products in console
