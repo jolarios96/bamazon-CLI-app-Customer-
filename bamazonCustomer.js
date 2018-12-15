@@ -1,6 +1,7 @@
 // Initialize Packages
 var mysql = require('mysql');
 var inquirer = require('inquirer');
+require("console.table");
 
 // Main App Driver
 //===================================================================================
@@ -35,6 +36,9 @@ function loadProducts() {
     // Selects all from 'products' in table
     connection.query('SELECT * FROM products', function (err, res) {
         if (err) throw err;
+
+        // renders table of products in console
+        console.table(res);
 
         // Prompts user for a product ID
         promptForItem(res);
