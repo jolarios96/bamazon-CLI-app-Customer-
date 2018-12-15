@@ -1,7 +1,7 @@
 // Initialize Packages
-var mysql = require('mysql');
-var inquirer = require('inquirer');
-require("console.table");
+var mysql = require('mysql'); //for database
+var inquirer = require('inquirer'); //for prompts
+require("console.table"); //for rendering tables in console
 
 // Main App Driver
 //===================================================================================
