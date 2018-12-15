@@ -2,6 +2,8 @@
 var mysql = require('mysql');
 var inquirer = require('inquirer');
 
+// Main App Driver
+//===================================================================================
 // MySQL Connection
 var connection = mysql.createConnection({
     host: "localhost",
@@ -24,8 +26,11 @@ connection.connect(function (err) {
     }
     loadProducts();
 });
+//===================================================================================
 
 
+// FUNCTIONS
+//===================================================================================
 // load products from table
 function loadProducts() {
     // Selects all from 'products' in table
@@ -93,3 +98,15 @@ function promptQuantity() {
 
     });
 };
+
+// check Inventory for product
+function checkInventory(choiceID, inventory) {
+    for (var i = 0; i < inventory.length; i++) {
+        if (inventory[i].item_id === choiceID) {
+            // If product exists, return the product
+            return inventory[i];
+        }
+    }
+
+    return null;
+}
