@@ -26,7 +26,6 @@ connection.connect(function (err) {
     }
     loadProducts();
 });
-//===================================================================================
 
 
 // FUNCTIONS
@@ -50,23 +49,22 @@ function promptForItem(items) {
             message: 'Input the ID of the product to buy.',
             name: 'choice',
         }
-    ])
-        .then(function (val) {
-            var choiceID = parseInt(val.choice);
-            var product = checkInventory(choiceID, items);
+    ]).then(function (val) {
+        var choiceID = parseInt(val.choice);
+        var product = checkInventory(choiceID, items);
 
-            // If product exists
-            if (product) {
-                // Prompt for quantity
-                promptQuantity(product);
-            } else {
-                console.log('\nThat item is out of stock!');
-                loadProducts();
-            }
-        });
+        // If product exists
+        if (product) {
+            // Prompt for quantity
+            promptQuantity(product);
+        } else {
+            console.log('\nThat item is out of stock!');
+            loadProducts();
+        };
+    });
 };
 
-function promptQuantity() {
+function promptQuantity(product) {
     inquirer.prompt([
         {
             type: "input",
@@ -85,17 +83,8 @@ function promptQuantity() {
             loadProducts();
         } else {
             // Finish the purchase, update table
-            connection.query(
-                "UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?",
-                [quantity, product.item_id],
-                function (err, res) {
-                    // Inform of success, show info, re-run program
-                    console.log("\nSuccessfully purchased " + quantity + " " + product.product_name + "'s!");
-                    loadProducts();
-                }
-            );
-        }
-
+            finalize(product, quantity)
+        };
     });
 };
 
@@ -103,10 +92,23 @@ function promptQuantity() {
 function checkInventory(choiceID, inventory) {
     for (var i = 0; i < inventory.length; i++) {
         if (inventory[i].item_id === choiceID) {
+
             // If product exists, return the product
             return inventory[i];
-        }
-    }
+        };
+    };
 
     return null;
-}
+};
+
+function finalize(product, quantity) {
+    connection.query(
+        "UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?",
+        [quantity, product.item_id],
+        function (err, res) {
+            // Inform of success, show info, re-run program
+            console.log("\nSuccessfully purchased " + quantity + " " + product.product_name + "'s!");
+            loadProducts();
+        }
+    );
+};
