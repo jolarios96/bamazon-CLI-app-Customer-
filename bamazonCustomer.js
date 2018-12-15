@@ -39,14 +39,13 @@ function loadProducts() {
 
 // Prompts user for a product ID
 function promptForItem(items) {
-    inquirer
-        .prompt([
-            {
-                type: 'input',
-                name: 'choice',
-                message: 'Input the ID of the product to buy.',
-            }
-        ])
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'Input the ID of the product to buy.',
+            name: 'choice',
+        }
+    ])
         .then(function (val) {
             var choiceID = parseInt(val.choice);
             var product = checkInventory(choiceID, items);
@@ -55,14 +54,42 @@ function promptForItem(items) {
             if (product) {
                 // Prompt for quantity
                 promptQuantity(product);
-            }
-            else {
+            } else {
                 console.log('\nThat item is out of stock!');
                 loadProducts();
             }
         });
-}
+};
 
 function promptQuantity() {
-    // Prompt for amount
-}
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "quantity",
+            message: "How many would you like?",
+            validate: function (val) {
+                return val > 0
+            }
+        }
+    ]).then(function (val) {
+        var quantity = parseInt(val.quantity);
+
+        // If supply < user query
+        if (quantity > product.stock_quantity) {
+            console.log("\nInsufficient quantity!");
+            loadProducts();
+        } else {
+            // Finish the purchase, update table
+            connection.query(
+                "UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?",
+                [quantity, product.item_id],
+                function (err, res) {
+                    // Inform of success, show info, re-run program
+                    console.log("\nSuccessfully purchased " + quantity + " " + product.product_name + "'s!");
+                    loadProducts();
+                }
+            );
+        }
+
+    });
+};
